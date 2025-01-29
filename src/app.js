@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors"
 
 // mongoose.connect('mongodb://127.0.0.1:27017/test');
+const app = express();
 
 app.use(cors({
     origin : process.env.CORS_ORIGIN,
@@ -11,11 +12,15 @@ app.use(cors({
 
 
 app.use(express.json({ limit: "16kb"}))
-app.use(express.urlencoded({extended: true, limit16kb}))
+app.use(express.urlencoded({extended: true, limit: "16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser());
 
-const app = express();
+// import routes
 
+import userRouter from "./routes/user.routes.js"
 
+app.use("/api/v1/users", userRouter)
+
+// http://localhost:4000//api/v1/users/register
 export default app

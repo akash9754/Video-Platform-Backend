@@ -1,8 +1,6 @@
-import { promises } from "dns"
-
-const asyncHandeler = (requestHandler) => {
-    (req, res, next) => {
-        return  Promise.resolve(requestHandler(req, res, next)).catch((err) => next(err))
+const asyncHandler = (requestHandler) => {
+   return async (req, res, next) => {
+          Promise.resolve(requestHandler(req, res, next)).catch((err) => next(err))
     }
 }
 
@@ -20,4 +18,5 @@ const asyncHandler = (fn) => async (req, res, next) => {
                     message: err.message
                 })
             }
-} */
+} 
+            */
