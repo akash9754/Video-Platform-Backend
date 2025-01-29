@@ -2,10 +2,10 @@
   "name": "video-streaming-app-backend",
   "version": "1.0.0",
   "description": "it's online video streraming plateform",
-  "main": "src/index.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev" : "nodemon src/index.js"
+    "dev": "nodemon src/index.js"
   },
   "author": "Akassh",
   "license": "ISC",
@@ -14,5 +14,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "node": "^18.20.6"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2"
   }
 }
