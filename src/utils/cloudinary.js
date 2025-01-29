@@ -1,4 +1,6 @@
 import { v2 as cloudinary }  from "cloudinary";
+// import { unlinkSync } from "node:fs"
+import fs from "fs";
 
 cloudinary.config({ 
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
@@ -17,7 +19,10 @@ cloudinary.config({
             console.log("response url path : ", response.url);
             return response;
         } catch (error) {
-                fs.unlinkSync(localFilePath)     // remove the locally saved temporary file when upload operation got failed
+                //  unlink
+                
+                 fs.unlinkSync(localFilePath)
+                // remove the locally saved temporary file when upload operation got failed
                 return null
         }
     }
