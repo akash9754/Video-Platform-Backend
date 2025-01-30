@@ -9,10 +9,10 @@ const registerUser = asyncHandler ( async (req, res) =>{
     //     message : "all fine no error left - askashhhhhhhh "
     // })
             const {username, fullName, email, password} = req.body
-            // console.log("username :", username);
-            // console.log("fullName :", fullName);
-            // console.log("email :", email);
-            // console.log("password :", password);
+            console.log("username :", username);
+            console.log("fullName :", fullName);
+            console.log("email :", email);
+            console.log("password :", password);
             
             
             if ([username, fullName, email, password].some( (feild) => feild?.trim() === ""))
@@ -41,7 +41,7 @@ const registerUser = asyncHandler ( async (req, res) =>{
             // console.log("req.files : ", req.files);
 
             if (!avatarLocalPath) {
-                throw new ApiError(400, "Avatar Files is required");
+                throw new ApiError(400, "Avatar Files is required 1");
             }
             console.log("avtar : local path : ", avatarLocalPath);
             const avatar = await uploadOnCloudinary(avatarLocalPath);
@@ -49,16 +49,17 @@ const registerUser = asyncHandler ( async (req, res) =>{
             // console.log("avtar : pr : ", avatar);
             // console.log("avtar : url : ", avatar.url);
             if (!avatar) {
-                throw new ApiError(400, "Avatar file is required")
+                throw new ApiError(400, "Avatar file is required2")
             }
             
             const user = await User.create({
                 fullName,
                 avatar : avatar.url,
                 coverImage : coverImage?.url || "",
-                password,
-                username : username.toLowerCase()
-            })
+                 password,
+                 email,
+                username: username.toLowerCase()
+            }) 
             
                 const createdUser = await User.findById(user._id).select(
                     "-password -refreshToken"
