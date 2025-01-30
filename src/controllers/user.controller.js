@@ -58,7 +58,7 @@ const registerUser = asyncHandler ( async (req, res) =>{
                 coverImage : coverImage?.url || "",
                  password,
                  email,
-                username: usernametoLowerCase()
+                username: username.toLowerCase()
             }) ;
             
                 const createdUser = await User.findById(user._id).select(
@@ -76,4 +76,37 @@ const registerUser = asyncHandler ( async (req, res) =>{
 
 })
 
-export { registerUser }
+const loginUser = asyncHandler( async (req, res, next) => {
+        const { username, email, password} = req.body
+       
+        if(!(username || email)) {
+            throw new ApiError(401, "email or username required")
+        }
+
+        const user = await User.findOne({
+           $or : [{username}, {email}] 
+        })
+
+        const isUser = await user.isPasswordCorrect(password)
+        if (!isUser) {
+            throw new ApiError(407, "Entered wrong password") 
+        }
+          
+        const accessToken = await user.generateAccessToken()
+        const refreshToken = user.generateRefreshToken()
+
+        user.refreshToken = refreshToken
+        user.save(refreshToken)
+
+        res.status(200)
+        .cookies('accessToken', accessToken)
+        .cookies('refreshToken', refreshToken)
+        .json(
+            new ApiResponse(200, {
+                accessToken, refreshToken
+            }, "User Register Successfully")
+        )
+        
+})
+
+export { registerUser, loginUser, }
