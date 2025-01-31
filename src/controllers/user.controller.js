@@ -6,7 +6,11 @@ import { ApiResponse } from "../utils/ApiResponse.js"
 
 const generateAccessAndRefreshToken = async (userId) => {
         try {
-            const user = User.findById(userId);
+            const user = await User.findById(userId);
+            // console.log("userId :", userId);
+            // console.log("user :", user);
+
+            
             const accessToken = user.generateAccessToken();
             const refreshToken = user.generateRefreshToken();
             user.refreshToken = refreshToken;
@@ -108,11 +112,12 @@ const loginUser = asyncHandler( async (req, res) => {
             throw new ApiError(404, "User does not exist") 
         }
 
-        const passwordCorrect = await user.isPasswordCorrect(user);
+        const passwordCorrect = await user.isPasswordCorrect(password);
         if (!passwordCorrect) {
             throw new ApiError(401, "wrong Password") 
         }
-
+        console.log("userId in before to generate token ", user._id);
+        
         const { accessToken, refreshToken }= await generateAccessAndRefreshToken(user._id);
 
         const option = {
@@ -120,13 +125,14 @@ const loginUser = asyncHandler( async (req, res) => {
             secure: true
         }
 
-
+        // user = User.findById(user._id).select("-password")
+        
         return res.status(200)
         .cookie('accessToken', accessToken)
         .cookie('refreshToken', refreshToken)
         .json(
             new ApiResponse(200, {
-                username, accessToken, refreshToken  //optional
+                user, accessToken, refreshToken  //optional
             }, "User Register Successfully")
         )
         
@@ -143,7 +149,7 @@ const logoutUser = asyncHandler( async(req, res) => {
         }
     )
 
-    const option {
+    const option = {
         httpOnly: true,
         secure: true
     }
