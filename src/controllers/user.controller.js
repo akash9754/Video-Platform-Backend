@@ -233,6 +233,33 @@ const getCurrentUser = asyncHandler( async (req, res) => {
         )
 })
 
+const updateUserDetails = asyncHandler( async (req, res) => {
+        const {fullName, email} =  req.body
+
+        if ([fullName, email].some((feild) => feild?.trim() === "")) {
+            throw new ApiError(401,"All feilds Are required");
+        }
+
+        const user = await findByIdAndUpdate(
+            req.user._id,
+            {
+                $set: {
+                    fullName,
+                    email
+                }
+            },
+            {
+                new: true
+            }
+        ).select("-password")
+
+        return res.status(200)
+        .json(
+            new ApiResponse(200, user, "User deatails updated Succesfully" )
+        )
+
+})
+
 
 
 
@@ -241,4 +268,5 @@ export { registerUser,
         logoutUser,
         refreshAccessToken,
         changeCurrentPassword,
-        getCurrentUser }
+        getCurrentUser,
+        updateUserDetails, }
