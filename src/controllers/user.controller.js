@@ -306,7 +306,7 @@ const updateUserCoverImage = asyncHandler( async (req, res) => {
         req.user._id,
         {
             coverImage : coverImage.url
-        }
+        },
         {
             new: true
         }
