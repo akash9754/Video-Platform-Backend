@@ -319,6 +319,20 @@ const updateUserCoverImage = asyncHandler( async (req, res) => {
 
 })
 
+const getUserChannelProfile = asyncHandler( async (req, res) => {
+    const {username} = req.params
+
+    if (!username?.trim()) {
+        throw new ApiError(400, "Username is missing");
+    }
+
+    const channel = await User.aggregate([
+        {
+            $match
+        }
+    ])
+})
+
 export { registerUser, 
         loginUser, 
         logoutUser,
