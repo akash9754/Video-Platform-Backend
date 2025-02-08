@@ -229,9 +229,11 @@ const changeCurrentPassword = asyncHandler( async (req, res) => {
 })
 
 const getCurrentUser = asyncHandler( async (req, res) => {
+    // console.log(req.user);
+    
         return res.status(200)
         .json (
-            new ApiResponse(200, res.user , "Current User feched Successfully" )
+            new ApiResponse(200, req.user , "Current User feched Successfully" )
         )
 })
 
@@ -242,7 +244,7 @@ const updateUserDetails = asyncHandler( async (req, res) => {
             throw new ApiError(401,"All feilds Are required");
         }
 
-        const user = await findByIdAndUpdate(
+        const user = await User.findByIdAndUpdate(
             req.user._id,
             {
                 $set: {
